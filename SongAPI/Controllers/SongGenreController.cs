@@ -7,38 +7,38 @@ namespace SongAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SongController : ControllerBase
+    public class SongGenreController : ControllerBase
     {
         protected ResponseDto _response;
-        private ISongRepository _songRepository;
-        public SongController(ISongRepository songRepository)
+        private ISongGenreRepository _repository;
+        public SongGenreController(ISongGenreRepository repository)
         {
-            _songRepository = songRepository;
+            _repository = repository;
             _response = new ResponseDto();
         }
 
-        [HttpGet]
-        public async Task<object> Get()
+        [HttpGet("/genre{id}")]
+        public async Task<object> GetSongs(int id)
         {
             try
             {
-                IEnumerable<SongDto> songs = await _songRepository.GetSongs();
+                IEnumerable<SongGenreDto> songs = await _repository.GetSongsWithGenre(id);
                 _response.Result = songs;
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string>() { ex.ToString() }; 
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
             return _response;
         }
-        [HttpGet("{id}")]
-        public async Task<object> Get(int id)
+        [HttpGet("/song{id}")]
+        public async Task<object> GetGenres(int id)
         {
             try
             {
-                SongDto songs = await _songRepository.GetSongById(id);
-                _response.Result = songs;
+                IEnumerable<SongGenreDto> features = await _repository.GetSongGenresForSong(id);
+                _response.Result = features;
             }
             catch (Exception ex)
             {
@@ -48,27 +48,12 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
-        public async Task<object> Post([FromBody] SongPutPost songDto)
+        public async Task<object> Post([FromBody] SongGenrePutPost SongGenreDto)
         {
             try
             {
-                SongDto song = await _songRepository.CreateUpdateSong(songDto);
-                _response.Result = song;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string>() { ex.ToString() };
-            }
-            return _response;
-        }
-        [HttpPut("{id}")]
-        public async Task<object> Put([FromBody] SongPutPost songDto, int id)
-        {
-            try
-            {
-                SongDto song = await _songRepository.CreateUpdateSong(songDto, id);
-                _response.Result = song;
+                SongGenreDto songGenre = await _repository.AddGenre(SongGenreDto);
+                _response.Result = songGenre;
             }
             catch (Exception ex)
             {
@@ -82,7 +67,7 @@ namespace SongAPI.Controllers
         {
             try
             {
-                bool deleted = await _songRepository.DeleteSong(id);
+                bool deleted = await _repository.DeleteFeature(id);
                 _response.Result = deleted;
             }
             catch (Exception ex)

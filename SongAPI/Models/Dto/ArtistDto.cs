@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SongAPI.Models
+﻿namespace SongAPI.Models.Dto
 {
-    public class Artist
+    public class ArtistDto
     {
-        [Key]
         public int ArtistId { get; set; }
         public string Name { get; set; }
         public ICollection<Feature> Features { get; set; }

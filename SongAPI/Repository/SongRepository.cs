@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SongAPI.DbContexts;
 using SongAPI.Models;
 using SongAPI.Models.Dto;
+using SongAPI.Repository.Interface;
 
 namespace SongAPI.Repository
 {
@@ -16,17 +17,21 @@ namespace SongAPI.Repository
             _context = context;
             _mapper = mapper;
         }
-        public async Task<SongDto> CreateUpdateSong(SongDto songDto)
+        public async Task<SongDto> CreateUpdateSong(SongPutPost songDto)
         {
-            Song song = _mapper.Map<SongDto, Song>(songDto);
-            if(song.SongId > 0)
-            {
-                _context.Songs.Update(song);
-            }
-            else
-            {
-                _context.Songs.Add(song);
-            }
+            Song song = _mapper.Map<SongPutPost, Song>(songDto);
+            song.ReleaseDate = DateTime.Now;
+            song.Length = TimeSpan.FromSeconds(songDto.LengthInSec);
+            _context.Songs.Add(song);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<Song, SongDto>(song);
+        }
+        public async Task<SongDto> CreateUpdateSong(SongPutPost songDto, int id)
+        {
+            Song song = await _context.Songs.Where(x=>x.SongId==id).FirstOrDefaultAsync();
+            song = _mapper.Map<SongPutPost, Song>(songDto);
+            song.Length = TimeSpan.FromSeconds(songDto.LengthInSec);
+            _context.Songs.Update(song);
             await _context.SaveChangesAsync();
             return _mapper.Map<Song, SongDto>(song);
         }
