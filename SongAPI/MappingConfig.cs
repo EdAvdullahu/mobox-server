@@ -23,6 +23,13 @@ namespace SongAPI
                 config.CreateMap<Feature, FeaturePutPost>().ReverseMap();
                 config.CreateMap<SongGenre,SongGenrePutPost>().ReverseMap();
                 config.CreateMap<SongGenre,SongGenreDto>().ReverseMap();
+                config.CreateMap<Release,ReleaseDto>().ReverseMap();
+                config.CreateMap<Release, ReleasePutPost>().ReverseMap();
+                /*config.CreateMap<Feature, Artist>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Artist.Name))
+                .ReverseMap();
+                config.CreateMap<Genre, SongGenre>().ReverseMap();*/
+
             });
             return mappingConfig;
         }

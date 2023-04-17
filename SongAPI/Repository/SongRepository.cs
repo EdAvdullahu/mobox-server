@@ -56,8 +56,16 @@ namespace SongAPI.Repository
 
         public async Task<SongDto> GetSongById(int SongId)
         {
-            Song song = await _context.Songs.Where(x=>x.SongId==SongId).FirstOrDefaultAsync();
-            return _mapper.Map<SongDto>(song);
+            Song song = await _context.Songs
+                            .Include(s => s.Features)
+                            .Include(s => s.Genres)
+                            .FirstOrDefaultAsync(x => x.SongId == SongId);
+
+            // Map the song object to SongDto
+            SongDto songDto = _mapper.Map<SongDto>(song);
+
+            return songDto;
+
         }
 
         public async Task<IEnumerable<SongDto>> GetSongs()
