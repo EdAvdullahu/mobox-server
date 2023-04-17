@@ -8,7 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongAPI", "SongAPI\SongAPI.csproj", "{106B8605-F7BC-4577-92FE-6F5D6AC773B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongAPI", "SongAPI\SongAPI.csproj", "{106B8605-F7BC-4577-92FE-6F5D6AC773B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobox.Service.Identity", "Mango.Service.Identity\Mobox.Service.Identity.csproj", "{21BE4347-6361-49D3-BD25-32CFE8AC1AFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{106B8605-F7BC-4577-92FE-6F5D6AC773B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{106B8605-F7BC-4577-92FE-6F5D6AC773B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{106B8605-F7BC-4577-92FE-6F5D6AC773B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21BE4347-6361-49D3-BD25-32CFE8AC1AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21BE4347-6361-49D3-BD25-32CFE8AC1AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21BE4347-6361-49D3-BD25-32CFE8AC1AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21BE4347-6361-49D3-BD25-32CFE8AC1AFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
