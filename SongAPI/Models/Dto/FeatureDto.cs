@@ -1,6 +1,6 @@
-﻿namespace SongAPI.Models
+﻿namespace SongAPI.Models.Dto
 {
-    public class Feature
+    public class FeatureDto
     {
         public int FeatureId { get; set; }
         public int SongId { get; set; }
