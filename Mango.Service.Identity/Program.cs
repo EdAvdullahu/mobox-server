@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mobox.Service.Identity.Models;
 using Mobox.Service.Identity;
 using Mobox.Services.Identity.DbContexts;
+using Mobox.Service.Identity.Initializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ var build = builder.Services.AddIdentityServer(options =>
         .AddInMemoryClients(SD.Clients)
         .AddAspNetIdentity<ApplicationUser>();
 
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 build.AddDeveloperSigningCredential();
 var app = builder.Build();
 
@@ -41,7 +43,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    // use dbInitializer
+    dbInitializer.Initialize();
+}
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

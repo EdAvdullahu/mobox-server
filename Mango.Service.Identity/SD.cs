@@ -37,7 +37,7 @@ namespace Mobox.Service.Identity
                 },
                 new Client
                 {
-                    ClientId="mango",
+                    ClientId="mobox",
                     ClientSecrets= { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris={ "https://localhost:44378/signin-oidc" },
