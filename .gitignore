@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.vs/
+/.idea/
+/.vs/mobox-server/
+/.vs/mobox-server/v17/
