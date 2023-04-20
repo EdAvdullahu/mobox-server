@@ -2,7 +2,7 @@
 
 namespace SongAPI.Models
 {
-    public class SongGenre
+    public class GenreSong
     {
         [Key]
         public int SongGenreId { get; set; }
@@ -10,6 +10,5 @@ namespace SongAPI.Models
         public Song Song { get; set; }
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
-        public string Disposable { get; set; }
     }
 }

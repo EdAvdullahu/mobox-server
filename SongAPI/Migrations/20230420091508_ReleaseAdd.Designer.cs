@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SongAPI.DbContexts;
 
@@ -11,9 +12,10 @@ using SongAPI.DbContexts;
 namespace SongAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230420091508_ReleaseAdd")]
+    partial class ReleaseAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,29 +83,6 @@ namespace SongAPI.Migrations
                     b.HasKey("GenreId");
 
                     b.ToTable("Genres");
-                });
-
-            modelBuilder.Entity("SongAPI.Models.GenreSong", b =>
-                {
-                    b.Property<int>("SongGenreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SongGenreId"), 1L, 1);
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SongId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SongGenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.HasIndex("SongId");
-
-                    b.ToTable("GenreSong");
                 });
 
             modelBuilder.Entity("SongAPI.Models.Release", b =>
@@ -178,6 +157,29 @@ namespace SongAPI.Migrations
                     b.ToTable("Songs");
                 });
 
+            modelBuilder.Entity("SongAPI.Models.SongGenre", b =>
+                {
+                    b.Property<int>("SongGenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SongGenreId"), 1L, 1);
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SongGenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("SongGenres");
+                });
+
             modelBuilder.Entity("SongAPI.Models.Feature", b =>
                 {
                     b.HasOne("SongAPI.Models.Artist", "Artist")
@@ -193,25 +195,6 @@ namespace SongAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Artist");
-
-                    b.Navigation("Song");
-                });
-
-            modelBuilder.Entity("SongAPI.Models.GenreSong", b =>
-                {
-                    b.HasOne("SongAPI.Models.Genre", "Genre")
-                        .WithMany("Songs")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SongAPI.Models.Song", "Song")
-                        .WithMany("Genres")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
 
                     b.Navigation("Song");
                 });
@@ -234,6 +217,25 @@ namespace SongAPI.Migrations
                         .HasForeignKey("ReleaseId");
 
                     b.Navigation("Release");
+                });
+
+            modelBuilder.Entity("SongAPI.Models.SongGenre", b =>
+                {
+                    b.HasOne("SongAPI.Models.Genre", "Genre")
+                        .WithMany("Songs")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SongAPI.Models.Song", "Song")
+                        .WithMany("Genres")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Song");
                 });
 
             modelBuilder.Entity("SongAPI.Models.Artist", b =>

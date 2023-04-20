@@ -17,7 +17,7 @@ namespace SongAPI.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet("/genre{id}")]
+        [HttpGet("genre/{id}")]
         public async Task<object> GetSongs(int id)
         {
             try
@@ -32,7 +32,7 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
-        [HttpGet("/song{id}")]
+        [HttpGet("song/{id}")]
         public async Task<object> GetGenres(int id)
         {
             try

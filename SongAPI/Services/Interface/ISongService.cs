@@ -5,5 +5,6 @@ namespace SongAPI.Services.Interface
     public interface ISongService
     {
         Task<ReleaseGetRequest> CreateRelease(ReleasePostRequest Release);
+        Task<SongGetRequest> CreateSong(SongPostRequest SongRequest);
     }
 }

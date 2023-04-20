@@ -30,6 +30,8 @@ builder.Services.AddScoped<IFeatureRepository, FeatureRepository>();
 builder.Services.AddScoped<ISongGenreRepository, SongGenreRepository>();
 builder.Services.AddScoped<IReleaseRepository, ReleaseRepository>();
 builder.Services.AddScoped<ISongService, SongService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAudioService, AudioService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

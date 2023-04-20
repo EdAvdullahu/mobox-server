@@ -21,8 +21,8 @@ namespace SongAPI
                 config.CreateMap<Genre,GenrePutPost>().ReverseMap();
                 config.CreateMap<Feature,FeatureDto>().ReverseMap();
                 config.CreateMap<Feature, FeaturePutPost>().ReverseMap();
-                config.CreateMap<SongGenre,SongGenrePutPost>().ReverseMap();
-                config.CreateMap<SongGenre,SongGenreDto>().ReverseMap();
+                config.CreateMap<GenreSong, SongGenrePutPost>().ReverseMap();
+                config.CreateMap<GenreSong, SongGenreDto>().ReverseMap();
                 config.CreateMap<Release,ReleaseDto>().ReverseMap();
                 config.CreateMap<Release, ReleasePutPost>().ReverseMap();
                 /*config.CreateMap<Feature, Artist>()
