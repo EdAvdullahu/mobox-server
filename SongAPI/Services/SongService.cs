@@ -16,8 +16,9 @@ namespace SongAPI.Services
         private IReleaseRepository _release;
         private IAudioService _audioService;
         private IImageService _imageService;
+        private IMapper _mapper;
 
-        public SongService(ISongRepository song,ISongGenreRepository songGenre, IFeatureRepository feature, IReleaseRepository release, IAudioService audioService, IImageService imageService)
+        public SongService(ISongRepository song,ISongGenreRepository songGenre, IFeatureRepository feature, IReleaseRepository release, IAudioService audioService, IImageService imageService, IMapper mapper)
         {
             _song = song;
             _songGenre = songGenre;
@@ -25,15 +26,18 @@ namespace SongAPI.Services
             _release = release;
             _audioService = audioService;
             _imageService = imageService;
+            _mapper = mapper;
         }
 
-        public async Task<ReleaseGetRequest> CreateRelease(ReleasePostRequest ReleaseRequest)
+        public async Task<ReleaseDto> CreateRelease(ReleasePostRequest ReleaseRequest)
         {
-            ReleaseGetRequest releaseRequest = new ReleaseGetRequest();
-            /*releaseRequest.Songs = CreateSong(ReleaseRequest.Songs);
-            ReleaseDto release = await _release.CreateUpdateRelease(ReleaseRequest.Release);
-            releaseRequest.Release = release;*/
-            return releaseRequest;
+            ImageUploadResult image = await _imageService.AddImageAsync(ReleaseRequest.Image);
+            ReleasePutPost releasePut = _mapper.Map<ReleasePutPost>(ReleaseRequest);
+            releasePut.ReleaseDate = DateTime.Now;
+            releasePut.ImageUrl = image.Url+"";
+            releasePut.ReleaseType = ReleaseRequest.NumnerOfSongs <= 3 ? Models.ReleaseType.SINGLE : ReleaseRequest.NumnerOfSongs <= 6 ? Models.ReleaseType.EP : Models.ReleaseType.ALBUM; 
+            ReleaseDto release = await _release.CreateUpdateRelease(releasePut);
+            return release;
         }
         public async Task<SongGetRequest> CreateSong(SongPostRequest SongRequest)
         {
@@ -61,6 +65,12 @@ namespace SongAPI.Services
             return SongReturn;
             
         }
+
+        public Task<ArtistGetRequest> GetByArtist(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<List<FeatureDto>> addFeatures(List<FeaturePutPost> Features, int SongId)
         {
             List<FeatureDto> features = new List<FeatureDto>();

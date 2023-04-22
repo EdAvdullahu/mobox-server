@@ -12,11 +12,5 @@
         public ICollection<Song> Songs { get; set; }
         public ReleaseType ReleaseType { get; set; }
     }
-    public enum ReleaseType
-    {
-        SINGLE,
-        EP,
-        ALBUM
-    }
 }
 

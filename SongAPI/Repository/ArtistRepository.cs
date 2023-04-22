@@ -51,6 +51,79 @@ namespace SongAPI.Repository
             }
         }
 
+        public Task<object> GetArtist(int artistId)
+        {
+            var artist = _context.Artists
+            .Where(x => x.ArtistId == artistId)
+            .Select(x => new
+            {
+                ArtistId = x.ArtistId,
+                Name = x.Name,
+                Features = x.Features.Where(x => x.FeatureRole != Models.FeatureRole.MAIN)
+                    .Select(r => new
+                    {
+                        SongId = r.SongId,
+                        Name = r.Song.Name,
+                        ReleaseDate = r.Song.ReleaseDate,
+                        Length = r.Song.Length,
+                        Path = r.Song.Path,
+                        ImageUrl = r.Song.ImageUrl,
+                        Release = new
+                        {
+                            ReleaseId = r.Song.ReleaseId,
+                            Title = r.Song.Release.Title,
+                        },
+                        Features = r.Song.Features.Select(f => new
+                        {
+                            ArtistId = f.Artist.ArtistId,
+                            Name = f.Artist.Name
+                        }).ToList(),
+                        Genres = r.Song.Genres.Select(g => new
+                        {
+                            GenreId = g.Genre.GenreId,
+                            Name = g.Genre.Name,
+                            Description = g.Genre.Description
+                        }).ToList()
+                    }).ToList(),
+                Releases = x.Releases
+                    .Select(r => new
+                    {
+                        ReleaseId = r.ReleaseId,
+                        ReleaseType = r.ReleaseType,
+                        Title = r.Title,
+                        ReleaseDate = r.ReleaseDate,
+                        ImageUrl = r.ImageUrl,
+                        Description = r.Description,
+                        Songs = r.Songs
+                            .Select(s => new
+                            {
+                                SongId = s.SongId,
+                                Name = s.Name,
+                                ImageUrl = s.ImageUrl,
+                                Length = s.Length,
+                                Path = s.Path,
+                                ReleaseDate = s.ReleaseDate,
+                                IsExplicite = s.IsExplicite,
+                                HasFeatures = s.HasFeatures,
+                                Features = s.Features.Select(f => new
+                                {
+                                    ArtistId = f.Artist.ArtistId,
+                                    Name = f.Artist.Name
+                                }).ToList(),
+                                Genres = s.Genres.Select(g => new
+                                {
+                                    GenreId = g.Genre.GenreId,
+                                    Name = g.Genre.Name,
+                                    Description = g.Genre.Description
+                                }).ToList()
+                            }).ToList()
+                    }).ToList()
+            })
+            .SingleOrDefault();
+
+            return (Task<object>)(object)artist;
+        }
+
         public async Task<ArtistDto> GetArtistById(int artistId)
         {
             Artist artist = await _context.Artists.Where(x => x.ArtistId == artistId).FirstOrDefaultAsync();

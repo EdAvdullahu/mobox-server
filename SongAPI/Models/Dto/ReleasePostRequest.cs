@@ -2,7 +2,10 @@
 {
     public class ReleasePostRequest
     {
-        public ReleasePutPost Release { get; set; }
-        public List <SongPostRequest> Songs { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public int ArtistId { get; set; }
+        public IFormFile Image { get; set; }
+        public int NumnerOfSongs { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace SongAPI.Models.Dto
         public ICollection<Feature> Features { get; set; }
         public ICollection<SongGenre> Genres { get; set; }
         public int ReleaseId { get; set; }
+        public Release Release { get; set; }
         public bool IsExplicite { get; set; }
         public string Path { get; set; }
         public DateTime ReleaseDate { get; set; }

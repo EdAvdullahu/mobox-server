@@ -12,5 +12,20 @@ namespace SongAPI.DbContexts
         public DbSet<GenreSong> GenreSong { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Release> Releases { get; set; }
-    }
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Artist>()
+            .HasIndex(a => a.ArtistId);
+            // Index ArtistId in Features table
+
+        modelBuilder.Entity<Feature>()
+            .HasIndex(f => f.ArtistID);
+
+        // Index ArtistId in Releases table
+
+        modelBuilder.Entity<Release>()
+            .HasIndex(r => r.ArtistId);
+    }*/
+
+}
 }

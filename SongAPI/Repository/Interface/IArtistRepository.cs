@@ -9,5 +9,6 @@ namespace SongAPI.Repository.Interface
         Task<ArtistDto> CreateUpdateArtist(ArtistPutPost aristDto);
         Task<ArtistDto> CreateUpdateArtist(ArtistPutPost aristDto, int id);
         Task<bool> DeleteArtist(int artistId);
+        Task<object> GetArtist(int artistId);
     }
 }

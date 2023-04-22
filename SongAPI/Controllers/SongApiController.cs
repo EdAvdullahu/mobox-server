@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SongAPI.Models;
 using SongAPI.Models.Dto;
 using SongAPI.Repository;
 using SongAPI.Repository.Interface;
@@ -16,17 +17,34 @@ namespace SongAPI.Controllers
     {
         protected ResponseDto _response;
         private ISongService _songService;
-        public SongApiController(ISongService songService)
+        private IArtistRepository _artistRepository;
+        public SongApiController(ISongService songService, IArtistRepository artistRepository)
         {
             _response = new ResponseDto();
             _songService = songService;
+            _artistRepository = artistRepository;
         }
-        [HttpPost]
-        public async Task<object> Post(ReleasePostRequest Release)
+        [HttpGet("artist/{id}")]
+        public async Task<object> FilterByArtist(int id)
         {
             try
             {
-                ReleaseGetRequest release = await _songService.CreateRelease(Release);
+                Object release = await _artistRepository.GetArtist(id);
+                _response.Result = release;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpPost("release")]
+        public async Task<object> Post([FromForm]ReleasePostRequest Release)
+        {
+            try
+            {
+                ReleaseDto release = await _songService.CreateRelease(Release);
                 _response.Result = release;
             }
             catch (Exception ex)
