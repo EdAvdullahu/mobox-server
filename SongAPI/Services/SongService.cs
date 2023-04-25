@@ -66,10 +66,7 @@ namespace SongAPI.Services
             
         }
 
-        public Task<ArtistGetRequest> GetByArtist(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         private async Task<List<FeatureDto>> addFeatures(List<FeaturePutPost> Features, int SongId)
         {

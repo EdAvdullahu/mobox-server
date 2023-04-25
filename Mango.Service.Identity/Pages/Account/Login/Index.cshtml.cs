@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Mobox.Service.Identity.DbContexts;
 using Mobox.Service.Identity.Models;
+using Mobox.Services.Identity.DbContexts;
 
 namespace IdentityServer.Pages.Login;
 
