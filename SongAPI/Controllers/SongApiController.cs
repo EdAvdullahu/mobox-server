@@ -11,7 +11,7 @@ using SongAPI.Services.Interface;
 
 namespace SongAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/SongAPI")]
     [ApiController]
     public class SongApiController : ControllerBase
     {

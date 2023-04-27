@@ -1,4 +1,4 @@
-﻿namespace SongAPI.Models.Dto
+﻿namespace Web.Models.Dto
 {
     public class ResponseDto
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SongAPI.Models.Dto;
 using SongAPI.Repository;
@@ -6,7 +7,7 @@ using SongAPI.Repository.Interface;
 
 namespace SongAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Genre")]
     [ApiController]
     public class GenreController : ControllerBase
     {
@@ -49,6 +50,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
+        [Authorize]
         public async Task<object> Post([FromBody] GenrePutPost genreDto)
         {
             try
@@ -64,6 +66,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<object> Put([FromBody] GenrePutPost genreDto, int id)
         {
             try
@@ -79,6 +82,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
+        [Authorize]
         public async Task<object> Delete(int id)
         {
             try

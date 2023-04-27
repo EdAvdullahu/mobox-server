@@ -5,7 +5,7 @@ using SongAPI.Repository.Interface;
 
 namespace SongAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Song")]
     [ApiController]
     public class SongController : ControllerBase
     {

@@ -7,12 +7,12 @@ namespace Web.Services
     public class AuthService : BaseService, IAuthService
     {
         private readonly IHttpClientFactory _clientFactory;
-        private string villaUrl;
+        private string songUrl;
 
         public AuthService(IHttpClientFactory clientFactory, IConfiguration configuration) : base(clientFactory)
         {
             _clientFactory = clientFactory;
-            villaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
+            songUrl = configuration.GetValue<string>("ServiceUrls:SongAPI");
 
         }
 
@@ -22,7 +22,7 @@ namespace Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = villaUrl + "/api/v1/UsersAuth/login"
+                Url = songUrl + "/api/UsersAuth/login"
             });
         }
 
@@ -32,7 +32,7 @@ namespace Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = villaUrl + "/api/v1/UsersAuth/register"
+                Url = songUrl + "/api/UsersAuth/register"
             });
         }
     }

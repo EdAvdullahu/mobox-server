@@ -2,6 +2,7 @@
 {
     public static class SD
     {
+        public static string SongApiBase { get; set; }
         public enum ApiType
         {
             GET,
