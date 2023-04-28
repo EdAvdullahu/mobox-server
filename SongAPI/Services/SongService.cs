@@ -65,29 +65,28 @@ namespace SongAPI.Services
             return SongReturn;
             
         }
-
-        
-
         private async Task<List<FeatureDto>> addFeatures(List<FeaturePutPost> Features, int SongId)
         {
             List<FeatureDto> features = new List<FeatureDto>();
-            Features.ForEach(async feature =>
+            for (int i = 0; i < Features.Count; i++)
             {
+                FeaturePutPost feature = Features[i];
                 feature.SongId = SongId;
                 FeatureDto featureDto = await _feature.AddFeature(feature);
-                features.Add( featureDto);
-            });
+                features.Add(featureDto);
+            }
             return features;
         }
         private async Task<List<SongGenreDto>> addGenre(List<SongGenrePutPost> Genres, int SongId)
         {
             List<SongGenreDto> genres = new List<SongGenreDto>();
-            Genres.ForEach(async genre =>
+            for(int i = 0; i< Genres.Count; i++)
             {
-                genre.SongId = SongId;
-                SongGenreDto songGenreDto = await _songGenre.AddGenre(genre);
+                SongGenrePutPost gen = Genres[i];
+                gen.SongId = SongId;
+                SongGenreDto songGenreDto = await _songGenre.AddGenre(gen);
                 genres.Add(songGenreDto);
-            });
+            }
             return genres;
         }
     }

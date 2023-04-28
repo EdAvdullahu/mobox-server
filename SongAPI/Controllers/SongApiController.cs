@@ -18,18 +18,51 @@ namespace SongAPI.Controllers
         protected ResponseDto _response;
         private ISongService _songService;
         private IArtistRepository _artistRepository;
-        public SongApiController(ISongService songService, IArtistRepository artistRepository)
+        private ISearchRepository _searchRepository;
+        public SongApiController(ISongService songService, IArtistRepository artistRepository, ISearchRepository searchRepository)
         {
             _response = new ResponseDto();
             _songService = songService;
             _artistRepository = artistRepository;
+            _searchRepository = searchRepository;
         }
         [HttpGet("artist/{id}")]
         public async Task<object> FilterByArtist(int id)
         {
             try
             {
-                Object release = await _artistRepository.GetArtist(id);
+                object release = await _artistRepository.GetArtist(id);
+                _response.Result = release;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("genre/filter")]
+        public async Task<object> Get(string genres)
+        {
+            try
+            {
+                var songs = await _searchRepository.FilterByGere(genres);
+                _response.Result = songs;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("search/{name}")]
+        public async Task<object> Search(string name)
+        {
+            try
+            {
+                string[] terms = name.Split(' ');
+                object release = _searchRepository.SearchByName(terms);
                 _response.Result = release;
             }
             catch (Exception ex)

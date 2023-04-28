@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SongAPI.DbInitializer;
 using SongAPI.Models;
 
 namespace SongAPI.DbContexts
@@ -12,6 +13,12 @@ namespace SongAPI.DbContexts
         public DbSet<GenreSong> GenreSong { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Release> Releases { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            new GenreInitializer(modelBuilder).Seed();
+            new ArtistInitializer(modelBuilder).Seed();
+        }
         /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Artist>()
@@ -27,5 +34,5 @@ namespace SongAPI.DbContexts
             .HasIndex(r => r.ArtistId);
     }*/
 
-}
+    }
 }

@@ -10,7 +10,7 @@ namespace SongAPI.Models.Dto
         public string ImageUrl { get; set; }
         public bool HasFeatures { get; set; }
         public ICollection<Feature> Features { get; set; }
-        public ICollection<SongGenre> Genres { get; set; }
+        public ICollection<GenreSong> Genres { get; set; }
         public int ReleaseId { get; set; }
         public Release Release { get; set; }
         public bool IsExplicite { get; set; }
