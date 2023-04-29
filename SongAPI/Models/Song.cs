@@ -10,8 +10,6 @@ namespace SongAPI.Models
         public string Name { get; set; }
         public TimeSpan Length { get; set; }
         public string ImageUrl { get; set; }
-        /*public int ArtistId { get; set; }
-        public Artist Artist { get; set; }*/
         public bool HasFeatures { get; set; }
         public ICollection<Feature> Features { get; set; } 
         public ICollection<GenreSong> Genres { get; set; }
@@ -21,5 +19,7 @@ namespace SongAPI.Models
         public string Path { get; set; }
         public DateTime ReleaseDate { get; set; }
 
+        // Add functionality to like songs
+        public ICollection<SongLike> SongLikes { get; set; }
     }
 }

@@ -26,6 +26,12 @@ namespace SongAPI
                 config.CreateMap<Release,ReleaseDto>().ReverseMap();
                 config.CreateMap<Release, ReleasePutPost>().ReverseMap();
                 config.CreateMap<ReleasePutPost,ReleasePostRequest>().ReverseMap();
+                config.CreateMap<User, UserPutPost>().ReverseMap();
+                config.CreateMap<User, UserDto>().ReverseMap();
+                config.CreateMap<Collaboration, CollaborationDto>().ReverseMap();
+                config.CreateMap<Collaboration, CollaborationPutPost>().ReverseMap();
+                config.CreateMap<Playlist, PlaylistDto>().ReverseMap();
+                config.CreateMap<Playlist, PlaylistPutPost>().ReverseMap();
                 /*config.CreateMap<Feature, Artist>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Artist.Name))
                 .ReverseMap();

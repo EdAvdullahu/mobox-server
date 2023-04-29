@@ -24,6 +24,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 IMapper mapper = MappingConfig.RegisterMap().CreateMapper();
 builder.Services.AddControllersWithViews()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // DI
@@ -37,6 +41,8 @@ builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAudioService, AudioService>();
 builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
@@ -107,6 +113,9 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 var app = builder.Build();
+
+/*Test testS = new Test();
+await testS.TestService();*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
