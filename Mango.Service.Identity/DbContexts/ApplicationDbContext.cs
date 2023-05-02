@@ -14,7 +14,6 @@ namespace Mobox.Services.Identity.DbContexts
         {
 
         }
-        
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
     }
 }

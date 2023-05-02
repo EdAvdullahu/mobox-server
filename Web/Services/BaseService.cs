@@ -10,11 +10,8 @@ namespace Web.Services
 {
     public class BaseService : IBaseService
     {
-        private bool disposedValue;
-
         public ResponseDto responseModel { get; set; }
         public IHttpClientFactory httpClient { get; set; }
-        APIResponse IBaseService.responseModel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public BaseService(IHttpClientFactory httpClient)
         {
@@ -26,7 +23,7 @@ namespace Web.Services
         {
             try
             {
-                var client = httpClient.CreateClient("MangoAPI");
+                var client = httpClient.CreateClient("MoboxAPI");
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(apiRequest.Url);
@@ -35,11 +32,6 @@ namespace Web.Services
                 {
                     message.Content = new StringContent(JsonConvert.SerializeObject(apiRequest.Data),
                         Encoding.UTF8, "application/json");
-                }
-
-                if (!string.IsNullOrEmpty(apiRequest.AccessToken))
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.AccessToken);
                 }
 
                 HttpResponseMessage apiResponse = null;
@@ -79,24 +71,9 @@ namespace Web.Services
             }
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                  
-                }
-
-                
-                disposedValue = true;
-            }
-        }
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            GC.SuppressFinalize(true);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using AutoMapper.Internal;
 using Web.Models;
+using Web.Models.Dto;
 
 namespace Web.Services.IServices
 {
     public interface IBaseService : IDisposable
     {
-        APIResponse responseModel { get; set; }
+        ResponseDto responseModel { get; set; }
         Task<T> SendAsync<T>(APIRequest apiRequest);
     }
 }
