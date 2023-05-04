@@ -195,8 +195,6 @@ namespace SongAPI.Migrations
             migrationBuilder.DropTable(
                 name: "GenreSong");
 
-            migrationBuilder.DropTable(
-                name: "SongGenres");
 
             migrationBuilder.DropTable(
                 name: "Genres");

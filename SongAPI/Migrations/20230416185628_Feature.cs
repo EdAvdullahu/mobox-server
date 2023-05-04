@@ -16,8 +16,6 @@ namespace SongAPI.Migrations
                 name: "FK_Songs_Artists_ArtistId",
                 table: "Songs");
 
-            migrationBuilder.DropTable(
-                name: "SongGenres");
 
             migrationBuilder.DropIndex(
                 name: "IX_Songs_ArtistId",

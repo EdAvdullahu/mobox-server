@@ -50,8 +50,7 @@ namespace SongAPI.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "SongGenres");
+            
 
             migrationBuilder.CreateTable(
                 name: "GenreSong",

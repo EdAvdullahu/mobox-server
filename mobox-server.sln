@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mobox.Service.Identity", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PodcastAPI", "PodcastAPI\PodcastAPI.csproj", "{583A3812-9C7C-4911-8D2F-1CC8CD6C0ECD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{D307A9AB-8FD8-4B64-9FE2-04A8E60D0788}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{583A3812-9C7C-4911-8D2F-1CC8CD6C0ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{583A3812-9C7C-4911-8D2F-1CC8CD6C0ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{583A3812-9C7C-4911-8D2F-1CC8CD6C0ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D307A9AB-8FD8-4B64-9FE2-04A8E60D0788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D307A9AB-8FD8-4B64-9FE2-04A8E60D0788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D307A9AB-8FD8-4B64-9FE2-04A8E60D0788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D307A9AB-8FD8-4B64-9FE2-04A8E60D0788}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
