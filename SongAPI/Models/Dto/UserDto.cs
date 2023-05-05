@@ -12,4 +12,12 @@
     {
         public string UserName { get; set; }
     }
+    public class WhoAmI
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public List<PlaylistDto> Playlists { get; set; }
+        public List<SongLike> SongLikes { get; set; }
+        public List<PlaylistLike> PlaylistLikes { get; set; }
+    }
 }

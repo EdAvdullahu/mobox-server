@@ -62,6 +62,21 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpPost("like")]
+        public async Task<object> LikeSong(LikeSongPutPost likeSong)
+        {
+            try
+            {
+                LikeSongDto liked = await _songRepository.LikeSong(likeSong);
+                _response.Result = liked;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpPut("{id}")]
         public async Task<object> Put([FromBody] SongPutPost songDto, int id)
         {
@@ -83,6 +98,21 @@ namespace SongAPI.Controllers
             try
             {
                 bool deleted = await _songRepository.DeleteSong(id);
+                _response.Result = deleted;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpDelete("like/{id}")]
+        public async Task<object> RemoveLike(int id)
+        {
+            try
+            {
+                bool deleted = await _songRepository.removeLlikedSong(id);
                 _response.Result = deleted;
             }
             catch (Exception ex)

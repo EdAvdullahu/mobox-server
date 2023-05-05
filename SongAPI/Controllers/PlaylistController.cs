@@ -39,7 +39,7 @@ namespace SongAPI.Controllers
         {
             try
             {
-                PlaylistDto playlist = await _playlistRepository.GetPlaylistById(id);
+                object playlist = await _playlistRepository.GetPlaylistById(id);
                 _response.Result = playlist;
             }
             catch (Exception ex)
@@ -79,6 +79,21 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpPost("like")]
+        public async Task<object> LikePlaylist(PlaylistLikePutPost playlistLikeDto)
+        {
+            try
+            {
+                bool liked = await _playlistRepository.AddPlaylistToLiked(playlistLikeDto);
+                _response.Result = liked;
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpPost("collab")]
         public async Task<object> AddCollab(CollaborationPutPost collab)
         {
@@ -99,7 +114,7 @@ namespace SongAPI.Controllers
         {
             try
             {
-                bool added = await _playlistRepository.AddSong(song);
+                SongPlaylistDto added = await _playlistRepository.AddSong(song);
                 _response.Result = added;
             }
             catch (Exception ex)
@@ -125,11 +140,11 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("song")]
-        public async Task<object> RemoveSong(SongPlaylistPutPost song)
+        public async Task<object> RemoveSong(int id)
         {
             try
             {
-                bool removed = await _playlistRepository.RemoveSong(song);
+                bool removed = await _playlistRepository.RemoveSong(id);
                 _response.Result = removed;
             }
             catch (Exception ex)

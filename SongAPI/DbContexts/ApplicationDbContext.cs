@@ -18,6 +18,7 @@ namespace SongAPI.DbContexts
         public DbSet<SongLike> SongsLike { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<PlaylistLike> PlaylistsLike { get; set; }
+        public DbSet<PlaylistSong> PlaylistsSong { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Playlist>().HasIndex(p => p.OwnerId);

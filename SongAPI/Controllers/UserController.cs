@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SongAPI.Models;
 using SongAPI.Models.Dto;
 using SongAPI.Repository.Interface;
 
@@ -34,6 +35,22 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+
+        [HttpGet("likes/{id}")]
+        public async Task<object> GetLikedSongs(int id)
+        {
+            try
+            {
+                List<SongLike> songs = await _userRepository.LikedSongs(id);
+                _response.Result = songs;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpGet("{id}")]
         public async Task<object> Get(int id)
         {
@@ -41,6 +58,21 @@ namespace SongAPI.Controllers
             {
                 UserDto user = await _userRepository.GetUserById(id);
                 _response.Result = user;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("whoami/{name}")]
+        public async Task<object> WhoAmI(string name)
+        {
+            try
+            {
+                WhoAmI who = await _userRepository.WhoAmI(name);
+                _response.Result = who;
             }
             catch (Exception ex)
             {

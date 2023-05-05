@@ -1,4 +1,5 @@
-﻿using SongAPI.Models.Dto;
+﻿using SongAPI.Models;
+using SongAPI.Models.Dto;
 
 namespace SongAPI.Repository.Interface
 {
@@ -9,5 +10,7 @@ namespace SongAPI.Repository.Interface
         Task<UserDto> CreateUpdateUser(UserPutPost user);
         Task<UserDto> CreateUpdateUser(UserPutPost user, int id);
         Task<bool> DeleteUser(int userId);
+        Task<WhoAmI> WhoAmI(string name);
+        Task<List<SongLike>> LikedSongs(int id);
     }
 }

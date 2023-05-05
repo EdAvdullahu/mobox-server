@@ -21,5 +21,6 @@ namespace SongAPI.Models
 
         // Add functionality to like songs
         public ICollection<SongLike> SongLikes { get; set; }
+        public ICollection<PlaylistSong> Playlists { get; set; }
     }
 }

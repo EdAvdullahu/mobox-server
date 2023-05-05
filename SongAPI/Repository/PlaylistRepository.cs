@@ -36,35 +36,12 @@ namespace SongAPI.Repository
             }
         }
 
-        public async Task<bool> AddSong(SongPlaylistPutPost song)
+        public async Task<SongPlaylistDto> AddSong(SongPlaylistPutPost song)
         {
-            try
-            {
-                Playlist playlist = await _context.Playlists.Where(x => x.PlaylitId == song.PlaylistId).FirstOrDefaultAsync();
-                if (playlist == null)
-                {
-                    return false;
-                }
-
-                Song addSong = await _context.Songs.Where(x => x.SongId == song.SongId).FirstOrDefaultAsync();
-                if (addSong == null)
-                {
-                    return false;
-                }
-
-                if (playlist.Songs == null)
-                {
-                    playlist.Songs = new List<Song>();
-                }
-
-                playlist.Songs.Add(addSong);
+                PlaylistSong pls = _mapper.Map<PlaylistSong>(song);
+                _context.PlaylistsSong.Add(pls);
                 await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+                return _mapper.Map<SongPlaylistDto>(pls);
         }
 
         public Task<PlaylistDto> CreateUpdateArtist(PlaylistPutPost aristDto, int id)
@@ -99,10 +76,52 @@ namespace SongAPI.Repository
             }
         }
 
-        public async Task<PlaylistDto> GetPlaylistById(Guid playlitId)
+        public async Task<object> GetPlaylistById(Guid playlitId)
         {
-            Playlist playlist = await _context.Playlists.Include(x=>x.Songs).Where(x => x.PlaylitId == playlitId).FirstOrDefaultAsync();
-            return _mapper.Map<PlaylistDto>(playlist);
+            var playlist = await _context.Playlists.Include(x=>x.Songs).ThenInclude(x=>x.Song).ThenInclude(x=>x.Features).ThenInclude(x=>x.Artist)
+                .Include(x=>x.Songs).ThenInclude(x=>x.Song).ThenInclude(x=>x.Genres).ThenInclude(x=>x.Genre)
+                .Include(x=>x.Songs).ThenInclude(x=>x.Song).ThenInclude(x=>x.Release)
+                .Include(x=>x.PlaylistLikes)
+                .Where(x => x.PlaylitId == playlitId)
+                .Select(x=> new
+                {
+                    PlaylistId = x.PlaylitId,
+                    IsPublic = x.IsPublic,
+                    Title = x.Tittle,
+                    OwnerId = x.OwnerId,
+                    Description = x.Description,
+                    LikeCount = x.PlaylistLikes.Count,
+                    Songs = x.Songs.Select(r => new
+                    {
+                        SongId = r.SongId,
+                        Name = r.Song.Name,
+                        ReleaseDate = r.Song.ReleaseDate,
+                        Length = r.Song.Length,
+                        Path = r.Song.Path,
+                        ImageUrl = r.Song.ImageUrl,
+                        IsExplicit = r.Song.IsExplicite,
+                        HasFeatures = r.Song.HasFeatures,
+                        ReleaseId = r.Song.ReleaseId,
+                        Release = new
+                        {
+                            ReleaseId = r.Song.ReleaseId,
+                            Title = r.Song.Release.Title,
+                        },
+                        Features = r.Song.Features.Select(f => new
+                        {
+                            ArtistId = f.Artist.ArtistId,
+                            Name = f.Artist.Name
+                        }).ToList(),
+                        Genres = r.Song.Genres.Select(g => new
+                        {
+                            GenreId = g.Genre.GenreId,
+                            Name = g.Genre.Name,
+                            Description = g.Genre.Description
+                        }).ToList()
+                    })
+                })
+                .FirstOrDefaultAsync();
+            return playlist;
         }
 
         public async Task<IEnumerable<PlaylistDto>> GetPlaylists()
@@ -136,25 +155,34 @@ namespace SongAPI.Repository
             }
         }
 
-        public async Task<bool> RemoveSong(SongPlaylistPutPost song)
+        public async Task<bool> RemoveSong(int plsId)
         {
             try
             {
-                Playlist playlist = await _context.Playlists.Where(x => x.PlaylitId == song.PlaylistId).FirstOrDefaultAsync();
-                if (playlist == null)
+                PlaylistSong pls = await _context.PlaylistsSong.Where(x => x.PlaySongId == plsId).FirstOrDefaultAsync();
+                if (pls == null)
                 {
                     return false;
                 }
-                Song removeSong = await _context.Songs.Where(x => x.SongId == song.SongId).FirstOrDefaultAsync();
-                if (removeSong == null)
-                {
-                    return false;
-                }
-                playlist.Songs.Remove(removeSong);
+                _context.PlaylistsSong.Remove(pls);
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> AddPlaylistToLiked(PlaylistLikePutPost plLike)
+        {
+            try{
+                plLike.LikeDateTime = DateTime.Now;
+                PlaylistLike plL = _mapper.Map<PlaylistLike>(plLike);
+                _context.PlaylistsLike.Add(plL);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception)
             {
                 return false;
             }

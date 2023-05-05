@@ -65,6 +65,7 @@ namespace SongAPI.Repository
                 {
                     ArtistId = x.ArtistId,
                     Name = x.Name,
+                    ImgUrl = x.ImageUrl,
                     Features = x.Features.Where(x => x.FeatureRole != Models.FeatureRole.MAIN)
                         .Select(r => new
                         {

@@ -73,5 +73,40 @@ namespace SongAPI.Repository
             IEnumerable<Song> songList = await _context.Songs.ToListAsync();
             return _mapper.Map<List<SongDto>>(songList);
         }
+
+        public async Task<LikeSongDto> LikeSong(LikeSongPutPost sLike)
+        {
+            try
+            {
+                sLike.LikeDateTime = DateTime.Now;
+                SongLike likeSong = _mapper.Map<SongLike>(sLike);
+                _context.SongsLike.Add(likeSong);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<LikeSongDto>(likeSong);
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> removeLlikedSong(int SongId)
+        {
+            try
+            {
+                SongLike liked = await _context.SongsLike.Where(x => x.Id == SongId).FirstOrDefaultAsync();
+                if(liked == null)
+                {
+                    return false;
+                }
+                _context.SongsLike.Remove(liked);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

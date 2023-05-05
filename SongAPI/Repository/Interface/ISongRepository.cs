@@ -9,5 +9,7 @@ namespace SongAPI.Repository.Interface
         Task<SongDto> CreateUpdateSong(SongPutPost songDto);
         Task<SongDto> CreateUpdateSong(SongPutPost songDto, int id);
         Task<bool> DeleteSong(int SongId);
+        Task<LikeSongDto> LikeSong(LikeSongPutPost sLike);
+        Task<bool> removeLlikedSong(int SongId);
     }
 }
