@@ -6,6 +6,7 @@ using Mobox.Services.Identity.DbContexts;
 using Mobox.Service.Identity.Initializer;
 using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Configuration;
+using EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,12 @@ builder.Services.AddIdentityServer(options =>
 .AddInMemoryClients(SD.Clients)
 .AddAspNetIdentity<ApplicationUser>()
 .AddDeveloperSigningCredential();
+
+var emailConfig = builder.Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
