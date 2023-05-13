@@ -19,12 +19,14 @@ namespace SongAPI.Controllers
         private ISongService _songService;
         private IArtistRepository _artistRepository;
         private ISearchRepository _searchRepository;
-        public SongApiController(ISongService songService, IArtistRepository artistRepository, ISearchRepository searchRepository)
+        private IReleaseRepository _releaseRepository;
+        public SongApiController(ISongService songService, IArtistRepository artistRepository, ISearchRepository searchRepository, IReleaseRepository releaseRepository)
         {
             _response = new ResponseDto();
             _songService = songService;
             _artistRepository = artistRepository;
             _searchRepository = searchRepository;
+            _releaseRepository = releaseRepository;
         }
         [HttpGet("artist/{id}")]
         public async Task<object> FilterByArtist(int id)
@@ -63,6 +65,21 @@ namespace SongAPI.Controllers
             {
                 string[] terms = name.Split(' ');
                 object release = _searchRepository.SearchByName(terms);
+                _response.Result = release;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("release/{id}")]
+        public async Task<object> GetReleaseById(int id)
+        {
+            try
+            {
+                object release = await _releaseRepository.GetReleaseById(id);
                 _response.Result = release;
             }
             catch (Exception ex)

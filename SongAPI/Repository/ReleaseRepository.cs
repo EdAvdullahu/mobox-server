@@ -55,10 +55,44 @@ namespace SongAPI.Repository
             return _mapper.Map<List<ReleaseDto>>(releases);
         }
 
-        public async Task<ReleaseDto> GetReleaseById(int ReleaseId)
+        public async Task<dynamic> GetReleaseById(int ReleaseId)
         {
-            Release release = await _context.Releases.Where(x => x.ReleaseId == ReleaseId).FirstOrDefaultAsync();
-            return _mapper.Map<ReleaseDto>(release);
+            var release = await _context.Releases
+        .Where(r => r.ReleaseId == ReleaseId)
+        .Select(r => new
+        {
+            ReleaseId = r.ReleaseId,
+            ReleaseType = r.ReleaseType,
+            Title = r.Title,
+            ReleaseDate = r.ReleaseDate,
+            ImageUrl = r.ImageUrl,
+            Description = r.Description,
+            Songs = r.Songs.Select(s => new
+            {
+                SongId = s.SongId,
+                Name = s.Name,
+                ImageUrl = s.ImageUrl,
+                Length = s.Length,
+                Path = s.Path,
+                ReleaseDate = s.ReleaseDate,
+                IsExplicit = s.IsExplicite,
+                HasFeatures = s.HasFeatures,
+                Features = s.Features.Select(f => new
+                {
+                    ArtistId = f.Artist.ArtistId,
+                    Name = f.Artist.Name
+                }).ToList(),
+                Genres = s.Genres.Select(g => new
+                {
+                    GenreId = g.Genre.GenreId,
+                    Name = g.Genre.Name,
+                    Description = g.Genre.Description
+                }).ToList()
+            }).ToList()
+        })
+        .SingleOrDefaultAsync();
+
+            return release;
         }
 
         public async Task<IEnumerable<ReleaseDto>> GetReleases()
