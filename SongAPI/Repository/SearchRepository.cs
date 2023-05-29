@@ -45,6 +45,8 @@ namespace SongAPI.Repository
                                  Length = song.Length,
                                  Path = song.Path,
                                  ImageUrl = song.ImageUrl,
+                                 ReleaseId = song.ReleaseId,
+                                 IsExplicite = song.IsExplicite,
                                  Features = _context.Features.Where(f => f.SongId == song.SongId).ToList()
                              }
                          }).AsEnumerable()

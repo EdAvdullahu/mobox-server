@@ -15,9 +15,9 @@ using Microsoft.AspNetCore.Identity;
 using Mobox.Service.Identity.Models;
 using Mobox.Service.Identity.MainModule.Account;
 using System.Security.Claims;
-using EmailService;
+/*using EmailService;*/
 using Microsoft.AspNetCore.Identity.UI.Services;
-using IEmailSender = EmailService.IEmailSender;
+/*using IEmailSender = EmailService.IEmailSender;*/
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -231,8 +231,8 @@ namespace IdentityServerHost.Quickstart.UI
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callback = Url.Action(nameof(ResetPassword), "Account", new { token, email = user.Email }, Request.Scheme);
 
-            var message = new Message(new string[] { user.Email }, "Reset password token", callback, null);
-            await _emailSender.SendEmailAsync(message);
+            /*var message = new Message(new string[] { user.Email }, "Reset password token", callback, null);
+            await _emailSender.SendEmailAsync(message);*/
 
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
         }

@@ -19,6 +19,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         
         public async Task<object> Get()
         {
@@ -35,6 +36,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize(Roles ="Listener")]
         public async Task<object> Get(int id)
         {
             try

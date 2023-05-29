@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="C:\Users\Victus\source\repos\mobox-server\EmailService\EmailService.csproj" />
+	  <ProjectReference Include="C:\Users\uhall\OneDrive\Desktop\lab2\mobox-server\EmailService\EmailService.csproj" />
   </ItemGroup>
 
 </Project>
