@@ -7,6 +7,6 @@ namespace PodcastAPI.Models
        
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Podcast> Podcasts { get; set;} = new List<Podcast>();
+        public ICollection<Podcast> Podcasts { get; set;} 
     }
 }

@@ -7,9 +7,10 @@ namespace PodcastAPI.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public int PodcasterId { get; set; }
-        public List<Artist>? Featured { get; set; } = new List<Artist>();
+        public Artist Podcaster { get; set; }
+        public string Features { get; set; }
         public TimeSpan Length { get; set; }
-        public List<PodcastGenre>? Genres { get; set; } = new List<PodcastGenre>();
+        public ICollection<PodcastGenre> Genres { get; set; }
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
 
         //qito dyja per foto
