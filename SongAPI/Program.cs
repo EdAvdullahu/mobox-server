@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SongAPI;
 using SongAPI.DbContexts;
+using SongAPI.RabbitMq.Consumer;
 using SongAPI.Repository;
 using SongAPI.Repository.Interface;
 using SongAPI.Services;
@@ -45,7 +46,13 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAudioService, AudioService>();
 builder.Services.AddScoped<ISearchRepository, SearchRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStreamRepository, StreamRepository>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<ISongStatistics, SongStatistics>();
 builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+builder.Services.AddScoped<IReleaseStatistics, ReleaseStatistics>();
+builder.Services.AddScoped<IUserStatistics, UserStatistics>();
+builder.Services.AddHostedService<RabbitMqConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers(option =>
 {

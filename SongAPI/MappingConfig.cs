@@ -39,6 +39,8 @@ namespace SongAPI
                 config.CreateMap<PlaylistLike, PlaylistLikePutPost>().ReverseMap();
                 config.CreateMap<SongLike, LikeSongDto>().ReverseMap();
                 config.CreateMap<SongLike, LikeSongPutPost>().ReverseMap();
+                config.CreateMap<PlaySong, PlaySongDto>().ReverseMap();
+                config.CreateMap<PlaySong, PlaySongCreateDto>().ReverseMap();
                 /*config.CreateMap<Feature, Artist>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Artist.Name))
                 .ReverseMap();

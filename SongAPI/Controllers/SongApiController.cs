@@ -20,13 +20,15 @@ namespace SongAPI.Controllers
         private IArtistRepository _artistRepository;
         private ISearchRepository _searchRepository;
         private IReleaseRepository _releaseRepository;
-        public SongApiController(ISongService songService, IArtistRepository artistRepository, ISearchRepository searchRepository, IReleaseRepository releaseRepository)
+        private IStreamRepository _streamRepository;
+        public SongApiController(ISongService songService, IArtistRepository artistRepository, ISearchRepository searchRepository, IReleaseRepository releaseRepository, IStreamRepository streamRepository)
         {
             _response = new ResponseDto();
             _songService = songService;
             _artistRepository = artistRepository;
             _searchRepository = searchRepository;
             _releaseRepository = releaseRepository;
+            _streamRepository = streamRepository;
         }
         [HttpGet("artist/{id}")]
         public async Task<object> FilterByArtist(int id)
@@ -89,6 +91,35 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("stream/song/{id}")]
+        public async Task<object> GetStreamsForSong(int songId)
+        {
+            try
+            {
+                IEnumerable<PlaySongDto> streams = await _streamRepository.getSongStreams(songId);
+                _response.Result = streams;
+            }catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("stream/user/{id}")]
+        public async Task<object> GetStreamsForUser(int userId)
+        {
+            try
+            {
+                IEnumerable<PlaySongDto> streams = await _streamRepository.getUserStreams(userId);
+                _response.Result = streams;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpPost("release")]
         public async Task<object> Post([FromForm]ReleasePostRequest Release)
         {
@@ -115,6 +146,21 @@ namespace SongAPI.Controllers
 
                 SongGetRequest Song = await _songService.CreateSong(song);
                 _response.Result = Song;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpPost("stream")]
+        public async Task<object> StreamSong(PlaySongCreateDto stream)
+        {
+            try
+            {
+                bool result = await _streamRepository.StreamSong(stream);
+                _response.Result = result;
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using SongAPI.Models;
 using SongAPI.Models.Dto;
 using SongAPI.Repository.Interface;
 using SongAPI.Services.Interface;
+using System.Collections;
 using System.Collections.Concurrent;
 
 namespace SongAPI.Repository
@@ -13,18 +14,15 @@ namespace SongAPI.Repository
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-        private IImageService _imageService;
-        public ArtistRepository(ApplicationDbContext context, IMapper mapper, IImageService imageService)
+        public ArtistRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _imageService = imageService;
         }
         public async Task<ArtistDto> CreateUpdateArtist(ArtistPutPost aristDto)
         {
-            string ImageUrl = _imageService.AddImageAsync(aristDto.Image)+"";
             Artist artist = _mapper.Map<ArtistPutPost, Artist>(aristDto);
-            artist.ImageUrl = ImageUrl;
+            artist.ImageUrl = aristDto.Image;
             _context.Artists.Add(artist);
             await _context.SaveChangesAsync();
             return _mapper.Map<Artist, ArtistDto>(artist);
@@ -139,6 +137,12 @@ namespace SongAPI.Repository
         public async Task<IEnumerable<ArtistDto>> GetArtists()
         {
             IEnumerable<Artist> artistList = await _context.Artists.ToListAsync();
+            return _mapper.Map<List<ArtistDto>>(artistList);
+        }
+
+        public async Task<IEnumerable<ArtistDto>> GetArtistsByName(string name)
+        {
+            IEnumerable<Artist> artistList = await _context.Artists.Where(x => x.Name.Contains(name)).ToListAsync();
             return _mapper.Map<List<ArtistDto>>(artistList);
         }
     }

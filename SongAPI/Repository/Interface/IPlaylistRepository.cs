@@ -15,5 +15,6 @@ namespace SongAPI.Repository.Interface
         Task<SongPlaylistDto> AddSong(SongPlaylistPutPost song);
         Task<bool> RemoveSong(int plsId);
         Task<bool> AddPlaylistToLiked(PlaylistLikePutPost plLike);
+        Task<IEnumerable<CollaborationDto>> GetCollabs(Guid playlistId);
     }
 }

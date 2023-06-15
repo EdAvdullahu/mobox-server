@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SongAPI.DbContexts;
 
@@ -11,9 +12,10 @@ using SongAPI.DbContexts;
 namespace SongAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529202029_newUisidField")]
+    partial class newUisidField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1102,32 +1104,6 @@ namespace SongAPI.Migrations
                     b.ToTable("PlaylistsSong");
                 });
 
-            modelBuilder.Entity("SongAPI.Models.PlaySong", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("ListenDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SongId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SongId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Streams");
-                });
-
             modelBuilder.Entity("SongAPI.Models.Release", b =>
                 {
                     b.Property<int>("ReleaseId")
@@ -1342,25 +1318,6 @@ namespace SongAPI.Migrations
                     b.Navigation("Song");
                 });
 
-            modelBuilder.Entity("SongAPI.Models.PlaySong", b =>
-                {
-                    b.HasOne("SongAPI.Models.Song", "Song")
-                        .WithMany("Streams")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SongAPI.Models.User", "User")
-                        .WithMany("Streams")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Song");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SongAPI.Models.Release", b =>
                 {
                     b.HasOne("SongAPI.Models.Artist", "Artist")
@@ -1435,8 +1392,6 @@ namespace SongAPI.Migrations
                     b.Navigation("Playlists");
 
                     b.Navigation("SongLikes");
-
-                    b.Navigation("Streams");
                 });
 
             modelBuilder.Entity("SongAPI.Models.User", b =>
@@ -1446,8 +1401,6 @@ namespace SongAPI.Migrations
                     b.Navigation("PlaylistLikes");
 
                     b.Navigation("SongLikes");
-
-                    b.Navigation("Streams");
                 });
 #pragma warning restore 612, 618
         }

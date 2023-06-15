@@ -10,5 +10,6 @@ namespace UserAPI.Repository.Interface
         Task<bool> ResetPassword(NewPasswordRequest request);
         Task<bool> ForgotPassword(string email);
         Task<bool> VerifyEmail(string token);
+        Task<bool> CreateArtist(Guid UserId);
     }
 }

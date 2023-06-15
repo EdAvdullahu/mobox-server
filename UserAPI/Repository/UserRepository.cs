@@ -6,6 +6,7 @@ using UserAPI.DbContexts;
 using UserAPI.Models;
 using UserAPI.Models.Dto;
 using UserAPI.RabbitMq.Models;
+using UserAPI.RabbitMq.Sender;
 using UserAPI.Repository.Interface;
 using UserAPI.Services.Interfaces;
 
@@ -17,12 +18,14 @@ namespace UserAPI.Repository
         private readonly IImageService _imageService;
         private readonly IEmailSender _emailService;
         private readonly ApplicationDbContext _context;
-        public UserRepository(IUserService userService,IImageService image, ApplicationDbContext context, IEmailSender emailService)
+        private readonly IRabbitMqSender _rabbitMqSender;
+        public UserRepository(IUserService userService,IImageService image, ApplicationDbContext context, IEmailSender emailService, IRabbitMqSender sender)
         {
             _userService = userService;
             _context = context;
             _imageService = image;
             _emailService = emailService;
+            _rabbitMqSender = sender;
         }
         public async Task<LoginResponse> AuthorizeUser(UserLogin userLogin, HttpResponse response)
         {
@@ -64,7 +67,8 @@ namespace UserAPI.Repository
                 Token = token,
                 Id = user.Id,
                 Role = user.Role,
-                RefreshToken = refreshToken.Token
+                RefreshToken = refreshToken.Token,
+                Username = user.Username
             };
         }
 
@@ -164,7 +168,14 @@ namespace UserAPI.Repository
 
             user.VerifiedAt = DateTime.Now;
             await _context.SaveChangesAsync();
-
+            NewUserHeader newUser = new NewUserHeader
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                Image = user.Image,
+                Type = "Listener"
+            };
+            _rabbitMqSender.SendMessage(newUser, "NewUser");
             return true;
         }
 
@@ -200,6 +211,25 @@ namespace UserAPI.Repository
 
             await _context.SaveChangesAsync();
 
+            return true;
+        }
+        public async Task<bool> CreateArtist(Guid UserId)
+        {
+            User user = await _context.Users.Where(u => u.Id == UserId).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return false;
+            }
+            user.Role = "Artist";
+            await _context.SaveChangesAsync();
+            NewUserHeader newUser = new NewUserHeader
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                Image = user.Image,
+                Type = "Artist"
+            };
+            _rabbitMqSender.SendMessage(newUser, "NewUser");
             return true;
         }
     }

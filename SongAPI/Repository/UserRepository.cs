@@ -106,5 +106,11 @@ namespace SongAPI.Repository
         {
             return await GetSongLikesByUser(id);
         }
+
+        public async Task<UserDto> GetUserByUISId(Guid uisid)
+        {
+            User user = await _context.Users.Where(x => x.UISId == uisid).FirstOrDefaultAsync();
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }

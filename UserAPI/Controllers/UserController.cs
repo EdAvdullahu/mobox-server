@@ -126,5 +126,20 @@ namespace UserAPI.Controllers
             }
             return _response;
         }
+        [HttpPost("create-artist")]
+        public async Task<object> CreateArtist(Guid userId)
+        {
+            try
+            {
+                bool result = await _userRepository.CreateArtist(userId);
+                _response.IsSuccess = result;
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
     }
 }

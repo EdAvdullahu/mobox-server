@@ -36,7 +36,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
-        [Authorize(Roles ="Listener")]
+        [Authorize(Roles ="Listener, Artist, Admin")]
         public async Task<object> Get(int id)
         {
             try
@@ -51,9 +51,24 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("name/{name}")]
+        public async Task<object> GetByNae(string name)
+        {
+            try
+            {
+                IEnumerable<ArtistDto> artists = await _artistRepository.GetArtistsByName(name);
+                _response.Result = artists;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }   
         [HttpPost]
         [Authorize]
-        public async Task<object> Post([FromBody] ArtistPutPost artistDto)
+        public async Task<object> Post(ArtistPutPost artistDto)
         {
             try
             {

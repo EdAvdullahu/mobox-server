@@ -187,5 +187,11 @@ namespace SongAPI.Repository
                 return false;
             }
         }
+
+        public Task<IEnumerable<CollaborationDto>> GetCollabs(Guid playlistId)
+        {
+            IEnumerable<Collaboration> collaborations = _context.Collaborations.Include(x=> x.User).Where(x => x.PlaylistId == playlistId);
+            return Task.FromResult(_mapper.Map<IEnumerable<CollaborationDto>>(collaborations));
+        }
     }
 }

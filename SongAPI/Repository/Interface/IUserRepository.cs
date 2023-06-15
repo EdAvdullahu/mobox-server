@@ -7,6 +7,7 @@ namespace SongAPI.Repository.Interface
     {
         Task<IEnumerable<UserDto>> GetUsers();
         Task<UserDto> GetUserById(int userId);
+        Task<UserDto> GetUserByUISId(Guid uisid);
         Task<UserDto> CreateUpdateUser(UserPutPost user);
         Task<UserDto> CreateUpdateUser(UserPutPost user, int id);
         Task<bool> DeleteUser(int userId);

@@ -64,6 +64,21 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("collab/{id}")]
+        public async Task<object> GetCollabs(Guid id)
+        {
+            try
+            {
+                IEnumerable<CollaborationDto> collabs = await _playlistRepository.GetCollabs(id);
+                _response.Result = collabs;
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpPost("playlist")]
         public async Task<object> Post(PlaylistPutPost playlistDto)
         {

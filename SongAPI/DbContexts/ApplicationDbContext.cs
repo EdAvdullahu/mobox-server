@@ -19,11 +19,14 @@ namespace SongAPI.DbContexts
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<PlaylistLike> PlaylistsLike { get; set; }
         public DbSet<PlaylistSong> PlaylistsSong { get; set; }
+        public DbSet<PlaySong> Streams { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Playlist>().HasIndex(p => p.OwnerId);
             modelBuilder.Entity<Collaboration>().HasIndex(p => p.UserId);
             modelBuilder.Entity<SongLike>().HasIndex(p => p.UserId);
+            modelBuilder.Entity<Artist>().HasIndex(p => p.UISId);
+            modelBuilder.Entity<User>().HasIndex(p => p.UISId);
             base.OnModelCreating(modelBuilder);
             new GenreInitializer(modelBuilder).Seed();
             new ArtistInitializer(modelBuilder).Seed();
