@@ -31,5 +31,13 @@
         public Guid PlaylistId { get; set; }
         public Playlist Playlist { get; set; }
     }
+
+    public class HasReadWritePerm
+    {
+        public int UserId { get; set; }
+        public Guid PlaylistId { get; set; }
+        public bool CanDelete { get; set; }
+        public bool CanAdd { get; set; }
+    }
     
 }

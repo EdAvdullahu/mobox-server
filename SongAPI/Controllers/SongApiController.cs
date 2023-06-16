@@ -1,4 +1,5 @@
 ﻿using AutoMapper.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -31,6 +32,7 @@ namespace SongAPI.Controllers
             _streamRepository = streamRepository;
         }
         [HttpGet("artist/{id}")]
+        [Authorize]
         public async Task<object> FilterByArtist(int id)
         {
             try
@@ -46,6 +48,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("genre/filter")]
+        [Authorize]
         public async Task<object> Get(string genres)
         {
             try
@@ -61,6 +64,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("search/{name}")]
+        [Authorize]
         public async Task<object> Search(string name)
         {
             try
@@ -77,6 +81,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("release/{id}")]
+        [Authorize]
         public async Task<object> GetReleaseById(int id)
         {
             try
@@ -92,6 +97,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("stream/song/{id}")]
+        [Authorize]
         public async Task<object> GetStreamsForSong(int songId)
         {
             try
@@ -106,6 +112,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("stream/user/{id}")]
+        [Authorize]
         public async Task<object> GetStreamsForUser(int userId)
         {
             try
@@ -121,6 +128,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("release")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Post([FromForm]ReleasePostRequest Release)
         {
             try
@@ -136,6 +144,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("song")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> PostSong([FromForm] SongPostRequest song, [FromForm] string features, [FromForm] string genres)
         {
             try
@@ -155,6 +164,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("stream")]
+        [Authorize]
         public async Task<object> StreamSong(PlaySongCreateDto stream)
         {
             try

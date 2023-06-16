@@ -20,6 +20,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
 
         public async Task<object> Get()
         {
@@ -37,6 +38,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet("likes/{id}")]
+        [Authorize]
         public async Task<object> GetLikedSongs(int id)
         {
             try
@@ -52,6 +54,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -67,6 +70,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("whoami/{name}")]
+        [Authorize]
         public async Task<object> WhoAmI(string name)
         {
             try
@@ -82,6 +86,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Post( UserPutPost userDto)
         {
             try
@@ -97,6 +102,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Delete(int id)
         {
             try

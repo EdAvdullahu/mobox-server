@@ -189,6 +189,14 @@ namespace UserAPI.Repository
 
             user.PasswordResetToken = _userService.CreateRandomToken();
             user.ResetTokenExpires = DateTime.Now.AddDays(1);
+            EmailHeader Email = new EmailHeader
+            {
+                Email = user.Email,
+                Subject = "Reset your password",
+                Message = user.PasswordResetToken,
+                UserId = user.Id
+            };
+            _emailService.SendEmail(Email, "reset");
             await _context.SaveChangesAsync();
 
             return true;

@@ -19,6 +19,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         
         public async Task<object> Get()
         {
@@ -35,6 +36,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize]
         
         public async Task<object> Get(int id)
         {
@@ -51,7 +53,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Post([FromBody] FeaturePutPost featureDto)
         {
             try
@@ -67,7 +69,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Delete(int id)
         {
             try

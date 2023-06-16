@@ -20,6 +20,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<object> Get()
         {
             try
@@ -35,6 +36,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -50,7 +52,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Post([FromBody] GenrePutPost genreDto)
         {
             try
@@ -66,7 +68,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Put([FromBody] GenrePutPost genreDto, int id)
         {
             try
@@ -82,7 +84,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Delete(int id)
         {
             try

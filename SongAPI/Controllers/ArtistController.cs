@@ -36,7 +36,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
-        [Authorize(Roles ="Listener, Artist, Admin")]
+        [Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -52,6 +52,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("name/{name}")]
+        [Authorize]
         public async Task<object> GetByNae(string name)
         {
             try
@@ -67,7 +68,7 @@ namespace SongAPI.Controllers
             return _response;
         }   
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Post(ArtistPutPost artistDto)
         {
             try
@@ -83,7 +84,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Put([FromBody] ArtistPutPost artistDto, int id)
         {
             try
@@ -99,7 +100,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Delete(int id)
         {
             try

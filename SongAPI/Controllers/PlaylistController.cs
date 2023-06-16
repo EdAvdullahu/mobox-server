@@ -19,7 +19,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
-
+        [Authorize]
         public async Task<object> Get()
         {
             try
@@ -35,6 +35,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<object> Get(Guid id)
         {
             try
@@ -49,7 +50,24 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("playlist/authorize/{userId}/{playlistId}")]
+        [Authorize]
+        public async Task<object> GetAuthForPlaylist(int userId, Guid playlistId)
+        {
+            try
+            {
+                HasReadWritePerm hasReadWritePerm = await _playlistRepository.UserPermissionsForPlaylist(userId, playlistId);
+                _response.Result = hasReadWritePerm;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpGet("user/{id}")]
+        [Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -65,6 +83,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("collab/{id}")]
+        [Authorize]
         public async Task<object> GetCollabs(Guid id)
         {
             try
@@ -80,6 +99,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("playlist")]
+        [Authorize]
         public async Task<object> Post(PlaylistPutPost playlistDto)
         {
             try
@@ -95,6 +115,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("like")]
+        [Authorize]
         public async Task<object> LikePlaylist(PlaylistLikePutPost playlistLikeDto)
         {
             try
@@ -110,6 +131,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("collab")]
+        [Authorize]
         public async Task<object> AddCollab(CollaborationPutPost collab)
         {
             try
@@ -125,6 +147,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("song")]
+        [Authorize]
         public async Task<object> AddSong(SongPlaylistPutPost song)
         {
             try
@@ -140,6 +163,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("collab/{collabId}")]
+        [Authorize]
         public async Task<object> RemoveCollab(int collabId)
         {
             try
@@ -154,7 +178,8 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
-        [HttpPut("song")]
+        [HttpDelete("song/{id}")]
+        [Authorize]
         public async Task<object> RemoveSong(int id)
         {
             try
@@ -170,6 +195,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
+        [Authorize]
         public async Task<object> Delete(Guid id)
         {
             try

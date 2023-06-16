@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SongAPI.Models.Dto;
 using SongAPI.Repository.Interface;
@@ -18,6 +19,7 @@ namespace SongAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Get()
         {
             try
@@ -33,6 +35,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Post([FromBody] SongPutPost songDto)
         {
             try
@@ -63,6 +67,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPost("like")]
+        [Authorize]
         public async Task<object> LikeSong(LikeSongPutPost likeSong)
         {
             try
@@ -78,6 +83,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Put([FromBody] SongPutPost songDto, int id)
         {
             try
@@ -93,6 +99,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Delete(int id)
         {
             try
@@ -108,6 +115,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpDelete("like/{id}")]
+        [Authorize]
         public async Task<object> RemoveLike(int id)
         {
             try

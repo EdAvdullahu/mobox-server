@@ -94,6 +94,7 @@ namespace SongAPI.Repository
                     Songs = x.Songs.Select(r => new
                     {
                         SongId = r.SongId,
+                        SongPlaylistId = r.PlaySongId,
                         Name = r.Song.Name,
                         ReleaseDate = r.Song.ReleaseDate,
                         Length = r.Song.Length,
@@ -192,6 +193,40 @@ namespace SongAPI.Repository
         {
             IEnumerable<Collaboration> collaborations = _context.Collaborations.Include(x=> x.User).Where(x => x.PlaylistId == playlistId);
             return Task.FromResult(_mapper.Map<IEnumerable<CollaborationDto>>(collaborations));
+        }
+
+        public async Task<HasReadWritePerm> UserPermissionsForPlaylist(int userIt, Guid playlistId)
+        {
+            HasReadWritePerm hasReadWritePerm = new HasReadWritePerm();
+            Playlist playlist = await _context.Playlists.Include(x => x.Collaborations).FirstOrDefaultAsync(x => x.PlaylitId == playlistId);
+            hasReadWritePerm.CanDelete = false;
+            hasReadWritePerm.CanAdd = false;
+            if (playlist == null)
+            {
+                
+            }
+            else
+            {
+                hasReadWritePerm.UserId = userIt;
+                hasReadWritePerm.PlaylistId = playlistId;
+                if(playlist.OwnerId==userIt)
+                {
+                    hasReadWritePerm.CanDelete = true;
+                    hasReadWritePerm.CanAdd= true;
+                }
+                else
+                {
+                    playlist.Collaborations.ToList().ForEach(playlist =>
+                    {
+                        if (playlist.UserId == userIt)
+                        {
+                            hasReadWritePerm.CanDelete = playlist.CanRemoveSongs;
+                            hasReadWritePerm.CanAdd = playlist.CanAddSongs;
+                        }
+                    });
+                }
+            }
+            return hasReadWritePerm;
         }
     }
 }

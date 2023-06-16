@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SongAPI.Models.Dto;
 using SongAPI.Repository.Interface;
@@ -21,6 +22,7 @@ namespace SongAPI.Controllers
             _userStatistics = userStatistics;
         }
         [HttpGet("artist/all-songs/{id}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Get(int id)
         {
             try
@@ -36,6 +38,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("song/by-dates/{id}/{start_date}/{end_date}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> GetSongStatByDates(int id, DateTime start_date, DateTime end_date)
         {
             try
@@ -51,6 +54,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("artist/all-releases/{id}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> GetReleases(int id)
         {
             try
@@ -66,6 +70,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("release/by-dates/{id}/{start_date}/{end_date}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> GetReleaseStatByDates(int id, DateTime start_date, DateTime end_date)
         {
             try
@@ -81,6 +86,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("artist/main/{id}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> GetArtistStatistics(int id)
         {
             try
@@ -96,6 +102,7 @@ namespace SongAPI.Controllers
             return _response;
         }
         [HttpGet("artist/top-listeners/{id}")]
+        [Authorize(Roles = "Artist, Admin")]
         public async Task<object> GetTopListeners(int id)
         {
             try

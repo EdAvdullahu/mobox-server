@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SongAPI.Models.Dto;
 using SongAPI.Services.Interface;
@@ -17,6 +18,7 @@ namespace SongAPI.Controllers
             _recommendationService = recommendationService;
         }
         [HttpGet("{playlistId}")]
+        [Authorize]
         public async Task<object> Get(Guid playlistId)
         {
             try
