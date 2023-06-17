@@ -120,7 +120,7 @@ namespace SongAPI.Controllers
         {
             try
             {
-                bool liked = await _playlistRepository.AddPlaylistToLiked(playlistLikeDto);
+                PlaylistLikeDto liked = await _playlistRepository.AddPlaylistToLiked(playlistLikeDto);
                 _response.Result = liked;
             }
             catch(Exception ex)
@@ -191,6 +191,22 @@ namespace SongAPI.Controllers
             {
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpDelete("like/{id}")]
+        [Authorize]
+        public async Task<object> RemoveLike(int id)
+        {
+            try
+            {
+                bool removed = await _playlistRepository.DeleteLikedPlaylist(id);
+                _response.Result = removed;
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
             }
             return _response;
         }

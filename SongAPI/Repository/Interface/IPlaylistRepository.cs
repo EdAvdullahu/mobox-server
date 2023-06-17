@@ -14,7 +14,8 @@ namespace SongAPI.Repository.Interface
         Task<bool> RemoveCollaborator(int collabId);
         Task<SongPlaylistDto> AddSong(SongPlaylistPutPost song);
         Task<bool> RemoveSong(int plsId);
-        Task<bool> AddPlaylistToLiked(PlaylistLikePutPost plLike);
+        Task<PlaylistLikeDto> AddPlaylistToLiked(PlaylistLikePutPost plLike);
+        Task<bool> DeleteLikedPlaylist(int plsId);
         Task<IEnumerable<CollaborationDto>> GetCollabs(Guid playlistId);
         Task<HasReadWritePerm> UserPermissionsForPlaylist(int userIt, Guid playlistId);
     }

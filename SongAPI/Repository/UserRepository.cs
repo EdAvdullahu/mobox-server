@@ -92,7 +92,7 @@ namespace SongAPI.Repository
 
         private async Task<List<PlaylistLike>> GetPlaylistLikesByUser(int userId)
         {
-            IEnumerable<PlaylistLike> playlistList = await _context.PlaylistsLike.Where(x => x.UserId == userId).ToListAsync();
+            IEnumerable<PlaylistLike> playlistList = await _context.PlaylistsLike.Where(x => x.UserId == userId).Include(x=>x.Playlist).ToListAsync();
             return _mapper.Map<List<PlaylistLike>>(playlistList);
         }
 

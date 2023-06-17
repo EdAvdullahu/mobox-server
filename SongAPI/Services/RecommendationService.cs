@@ -47,7 +47,7 @@ namespace SongAPI.Services
 
             // get recommended songs based on the weights
             List<Song> recommendedSongs = _context.Songs
-                .Include(s => s.Genres).Include(s => s.Features).Include(s => s.Streams)
+                .Include(s => s.Genres).Include(s => s.Features).ThenInclude(x=>x.Artist).Include(s=>s.Release)
                 .Where(x => !songs.Contains(x.SongId) && (x.Genres.Any(g => genres.Contains(g.GenreId)) || x.Features.Any(g => artists.Contains(g.ArtistID))))
                 .AsEnumerable()
                 .OrderByDescending(s => CalculateSongWeight(s, genreWeight, artistWeight)).Take(10).ToList();

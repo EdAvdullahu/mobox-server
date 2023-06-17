@@ -178,18 +178,19 @@ namespace SongAPI.Repository
                 return false;
             }
         }
-        public async Task<bool> AddPlaylistToLiked(PlaylistLikePutPost plLike)
+        public async Task<PlaylistLikeDto> AddPlaylistToLiked(PlaylistLikePutPost plLike)
         {
             try{
                 plLike.LikeDateTime = DateTime.Now;
                 PlaylistLike plL = _mapper.Map<PlaylistLike>(plLike);
                 _context.PlaylistsLike.Add(plL);
                 await _context.SaveChangesAsync();
-                return true;
+                PlaylistLike ret = await _context.PlaylistsLike.Include(x=>x.Playlist).FirstOrDefaultAsync(x=>x.Id == plL.Id);
+                return _mapper.Map<PlaylistLikeDto>(ret);
             }
             catch(Exception)
             {
-                return false;
+                return null;
             }
         }
 
@@ -231,6 +232,18 @@ namespace SongAPI.Repository
                 }
             }
             return hasReadWritePerm;
+        }
+
+        public async Task<bool> DeleteLikedPlaylist(int plsId)
+        {
+            PlaylistLike playlistLike = await _context.PlaylistsLike.FirstOrDefaultAsync(x => x.Id == plsId);
+            if (playlistLike == null)
+            {
+                return false;
+            }
+            _context.PlaylistsLike.Remove(playlistLike);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
