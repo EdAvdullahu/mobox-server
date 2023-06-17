@@ -13,5 +13,8 @@ namespace SongAPI.Repository.Interface
         Task<bool> DeleteUser(int userId);
         Task<WhoAmI> WhoAmI(string name);
         Task<List<SongLike>> LikedSongs(int id);
+        Task<UserExplore> GetUserExplore(int id);
+        Task<IEnumerable<User>> SearchUsers(string[] name);
+        Task<PublicProfile> GetUserPublicProfile(Guid userId);
     }
 }

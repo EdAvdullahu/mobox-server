@@ -141,5 +141,24 @@ namespace UserAPI.Controllers
             }
             return _response;
         }
+
+        //
+        [HttpGet("search-users/{name}")]
+        [Authorize]
+        public async Task<object> SearchUsers(string name)
+        {
+            try
+            {
+                IEnumerable<UserSearch> result = await _userRepository.SearchUsers(name);
+                _response.IsSuccess = true;
+                _response.Result = result;
+            }
+            catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
     }
 }

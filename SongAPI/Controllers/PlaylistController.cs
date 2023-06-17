@@ -194,13 +194,13 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
-        [HttpDelete]
+        [HttpDelete("{id}/{userId}")]
         [Authorize]
-        public async Task<object> Delete(Guid id)
+        public async Task<object> Delete(Guid id, int userId)
         {
             try
             {
-                bool deleted = await _playlistRepository.DeletePlaylist(id);
+                bool deleted = await _playlistRepository.DeletePlaylist(id, userId);
                 _response.Result = deleted;
             }
             catch (Exception ex)

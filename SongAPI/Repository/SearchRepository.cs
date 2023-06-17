@@ -181,6 +181,32 @@ namespace SongAPI.Repository
             var result = await _context.Songs.FromSqlRaw($"FilterByGenre {genres}").ToListAsync();
             return result;
         }
+
+        public async Task<IEnumerable<dynamic>> FilterPlaylist(string[] searchTerms, int userId)
+        {
+            var lowerSearchTerms = searchTerms.Select(term => term.ToLower()).ToArray();
+
+            var playlists = await _context.Playlists
+                .Include(p => p.Collaborations)
+                .Where(item => item.IsPublic || item.OwnerId == userId || item.Collaborations.Any(c => c.UserId == userId))
+                .ToListAsync();
+
+            var filteredPlaylists = playlists
+                .Where(item => lowerSearchTerms.All(search =>
+                    item.Tittle.ToLower().Contains(search) ||
+                    item.Description.ToLower().Contains(search)))
+                .Select(item => new
+                {
+                    Playlist = item,
+                    IsCollaborator = item.Collaborations.Any(c => c.UserId == userId),
+                    IsOwner = item.OwnerId == userId
+                })
+                .ToList();
+
+            return filteredPlaylists;
+        }
+
+
         private class ArtistReturn
         {
             public int ArtistId { get; set; }

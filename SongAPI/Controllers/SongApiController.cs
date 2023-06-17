@@ -127,6 +127,22 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("playlist/search/{userId}/{name}")]
+        [Authorize]
+        public async Task<object> SearchPlaylist(int userId, string name)
+        {
+            try
+            {
+                string[] terms = name.Split(' ');
+                IEnumerable<dynamic> playlists = await _searchRepository.FilterPlaylist(terms, userId);
+                _response.Result = playlists;
+            }catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
         [HttpPost("release")]
         [Authorize(Roles = "Artist, Admin")]
         public async Task<object> Post([FromForm]ReleasePostRequest Release)

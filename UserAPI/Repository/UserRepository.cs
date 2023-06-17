@@ -240,5 +240,18 @@ namespace UserAPI.Repository
             _rabbitMqSender.SendMessage(newUser, "NewUser");
             return true;
         }
+
+        public async Task<IEnumerable<UserSearch>> SearchUsers(string name)
+        {
+            var lowerSearchTerms = name.Split(' ').Select(term => term.ToLower()).ToArray();
+            IEnumerable<User> res = await _context.Users.ToListAsync();
+            IEnumerable<UserSearch> filteredRes =  res.Where(user => lowerSearchTerms.Any(term => (user.Username.ToLower()).Contains(term))).Select(item=> new UserSearch
+            {
+                Id = item.Id,
+                Username = item.Username,
+                Image = item.Image,
+            }).ToList();
+            return filteredRes;
+        }
     }
 }

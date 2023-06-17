@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 using SongAPI.DbContexts;
 using SongAPI.Models;
@@ -12,11 +13,15 @@ namespace SongAPI.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ISongStatistics _songStatistics;
+        private readonly IUserStatistics _userStatistics;
 
-        public UserRepository(ApplicationDbContext context, IMapper mapper)
+        public UserRepository(ApplicationDbContext context, IMapper mapper, ISongStatistics songStatistics, IUserStatistics userStatistics)
         {
             _context = context;
             _mapper = mapper;
+            _songStatistics = songStatistics;
+            _userStatistics = userStatistics;
         }
         public async Task<UserDto> CreateUpdateUser(UserPutPost user)
         {
@@ -111,6 +116,57 @@ namespace SongAPI.Repository
         {
             User user = await _context.Users.Where(x => x.UISId == uisid).FirstOrDefaultAsync();
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<UserExplore> GetUserExplore(int id)
+        {
+            UserExplore userExplore = new UserExplore();
+            User user = await _context.Users.Where(x => x.UserId == id).FirstOrDefaultAsync();
+            DateTime currentMonthStartDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1).Date;
+            DateTime currentMonthEndDate = DateTime.Now.Date;
+            var playSongs = await _context.Streams
+            .Where(ps => ps.UserId == id && ps.ListenDateTime >= currentMonthStartDate && ps.ListenDateTime <= currentMonthEndDate)
+            .ToListAsync();
+
+            var mostListenedSongs = playSongs
+                .GroupBy(ps => ps.SongId)
+                .OrderByDescending(g => g.Count())
+                .Take(20)
+                .Select(g => g.First().Song) // Get the first Song from each group
+                .ToList();
+            userExplore.UserId = user.UserId;
+            userExplore.UserName = user.UserName;
+            IEnumerable<Song> songs = await _context.Songs
+    .Where(x => mostListenedSongs.Select(s => s.SongId).Contains(x.SongId))
+    .ToListAsync();
+
+            songs = songs.Where(song => song != null).ToList(); // Null check
+            SongDto s = await _songStatistics.GetTodaysTrendingSong();
+            IEnumerable<ArtistDto> artistDtos = await _userStatistics.GetTrendingArtists();
+            userExplore.TrendingSong = _mapper.Map<Song>(s);
+            userExplore.TrendingArtist = artistDtos;
+            userExplore.MostPlayed = songs;
+            return userExplore;
+        }
+
+        public async Task<IEnumerable<User>> SearchUsers(string[] name)
+        {
+            var lowerSearchTerms = name.Select(term => term.ToLower()).ToArray();
+            IEnumerable<User> res = await _context.Users.ToListAsync();
+                return res.Where(user => lowerSearchTerms.Any(term => (user.UserName.ToLower()).Contains(term)));
+        }
+
+        public async Task<PublicProfile> GetUserPublicProfile(Guid userId)
+        {
+            User user = await _context.Users.Where(x => x.UISId == userId).FirstOrDefaultAsync();
+            IEnumerable<Playlist> publicPlaylist = await _context.Playlists.Where(x => x.OwnerId == user.UserId && x.IsPublic == true).ToListAsync();
+            PublicProfile profile = new PublicProfile()
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                PublicPlaylists = _mapper.Map<List<PlaylistDto>>(publicPlaylist)
+            };
+            return profile;
         }
     }
 }

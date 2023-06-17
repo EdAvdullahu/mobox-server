@@ -57,12 +57,16 @@ namespace SongAPI.Repository
             return _mapper.Map<Playlist, PlaylistDto>(playlist);
         }
 
-        public async Task<bool> DeletePlaylist(Guid playlistId)
+        public async Task<bool> DeletePlaylist(Guid playlistId, int userId)
         {
             try
             {
                 Playlist playlist = await _context.Playlists.Where(x => x.PlaylitId == playlistId).FirstOrDefaultAsync();
                 if (playlist == null)
+                {
+                    return false;
+                }
+                if(playlist.OwnerId != userId)
                 {
                     return false;
                 }

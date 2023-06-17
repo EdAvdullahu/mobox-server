@@ -6,5 +6,6 @@ namespace SongAPI.Repository.Interface
     {
         Task<AllSongsStatisticsDto> GetSongStatisticsForArtist(int artistId); 
         Task<IEnumerable<SongDateStat>> GetSongStatByDates(DateTime startDate, DateTime endDate, int songId);
+        Task<SongDto> GetTodaysTrendingSong();
     }
 }

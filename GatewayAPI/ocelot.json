@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/{action}",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST","GET" ]
     },
     {
       "DownstreamPathTemplate": "/api/{action}",

@@ -85,6 +85,55 @@ namespace SongAPI.Controllers
             }
             return _response;
         }
+        [HttpGet("search/{name}")]
+        [Authorize]
+        public async Task<object> SearchUsers(string name)
+        {
+            try
+            {
+                IEnumerable<User> users = await _userRepository.SearchUsers(name.Split(" "));
+                _response.Result = users;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        [HttpGet("public-profile/{id}")]
+        [Authorize]
+        public async Task<object> GetUserPublicProfile(Guid id)
+        {
+            try
+            {
+                PublicProfile profile = await _userRepository.GetUserPublicProfile(id);
+                _response.Result = profile;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+        /*[HttpGet("explore/{id}")]
+        [Authorize]
+        public async Task<object> GetUserExplore(int id)
+        {
+            try
+            {
+                UserExplore explore = await _userRepository.GetUserExplore(id);
+                _response.Result = explore;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }*/
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<object> Post( UserPutPost userDto)

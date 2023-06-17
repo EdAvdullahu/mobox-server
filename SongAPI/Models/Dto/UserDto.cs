@@ -23,4 +23,10 @@
         public List<SongLike> SongLikes { get; set; }
         public List<PlaylistLike> PlaylistLikes { get; set; }
     }
+    public class PublicProfile
+    {
+        public int UserId { get; set;}
+        public string UserName { get; set; }
+        public List<PlaylistDto> PublicPlaylists { get; set; }
+    }
 }

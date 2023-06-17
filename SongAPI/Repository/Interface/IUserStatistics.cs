@@ -6,5 +6,6 @@ namespace SongAPI.Repository.Interface
     {
         Task<ArtistsStatisticsDto> GetStatisticsForArtist(int artistId);
         Task<TopListenersDto> GetTopListeners (int artistId);
+        Task<IEnumerable<ArtistDto>> GetTrendingArtists();
     }
 }

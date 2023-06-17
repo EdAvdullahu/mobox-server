@@ -9,7 +9,7 @@ namespace SongAPI.Repository.Interface
         Task<object> GetPlaylistById(Guid playlistID);
         Task<PlaylistDto> CreateUpdatePlaylist(PlaylistPutPost aristDto);
         Task<PlaylistDto> CreateUpdateArtist(PlaylistPutPost aristDto, int id);
-        Task<bool> DeletePlaylist(Guid artistId);
+        Task<bool> DeletePlaylist(Guid artistId, int userId);
         Task<bool> AddCollaborator(CollaborationPutPost collab);
         Task<bool> RemoveCollaborator(int collabId);
         Task<SongPlaylistDto> AddSong(SongPlaylistPutPost song);

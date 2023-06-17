@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MimeKit.Cryptography;
 using SongAPI.DbContexts;
+using SongAPI.Models;
 using SongAPI.Models.Dto;
 using SongAPI.Repository.Interface;
 
@@ -9,8 +11,10 @@ namespace SongAPI.Repository
     public class SongStatistics : ISongStatistics
     {
         private readonly ApplicationDbContext _context;
-        public SongStatistics(ApplicationDbContext context) {
+        private IMapper _mapper;
+        public SongStatistics(ApplicationDbContext context,IMapper mapper) {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<SongDateStat>> GetSongStatByDates(DateTime startDate, DateTime endDate, int songId)
@@ -57,6 +61,13 @@ namespace SongAPI.Repository
             });
             all.Songs = stats;
             return all;
+        }
+
+        public async Task<SongDto> GetTodaysTrendingSong()
+        {
+            var obj = await _context.Streams.Include(x => x.Song).Where(x => x.ListenDateTime >= DateTime.Now.AddDays(-1)).GroupBy(x => x.SongId).Select(x => new { SongId = x.Key, Count = x.Count() }).OrderByDescending(x => x.Count).FirstOrDefaultAsync();
+            Song song = await _context.Songs.Where(x => x.SongId == obj.SongId).FirstOrDefaultAsync();
+            return _mapper.Map<SongDto>(song);
         }
     }
 }

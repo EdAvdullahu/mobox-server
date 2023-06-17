@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SongAPI.DbContexts;
 using SongAPI.Models;
 using SongAPI.Models.Dto;
@@ -10,9 +11,11 @@ namespace SongAPI.Repository
     public class UserStatistics : IUserStatistics
     {
         private readonly ApplicationDbContext _context;
-        public UserStatistics(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public UserStatistics(ApplicationDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ArtistsStatisticsDto> GetStatisticsForArtist(int artistId)
         {
@@ -175,6 +178,23 @@ namespace SongAPI.Repository
                 });
             });
             return streamers;
+        }
+
+        public async Task<IEnumerable<ArtistDto>> GetTrendingArtists()
+        {
+            DateTime lastMonthStartDate = DateTime.Now.AddMonths(-1).Date;
+            DateTime lastMonthEndDate = DateTime.Now.AddDays(-DateTime.Now.Day).Date;
+
+            var artists = await _context.Streams
+            .Where(ps => ps.ListenDateTime >= lastMonthStartDate && ps.ListenDateTime <= lastMonthEndDate)
+            .GroupBy(ps => ps.Song.Release.ArtistId)
+            .OrderByDescending(g => g.Count())
+            .Take(4)
+            .Select(g => g.Key)
+            .ToListAsync();
+
+            IEnumerable<Artist> artistDtos = await _context.Artists.Where(x => artists.Contains(x.ArtistId)).ToListAsync();
+            return _mapper.Map<IEnumerable<ArtistDto>>(artistDtos);
         }
     }
 }
